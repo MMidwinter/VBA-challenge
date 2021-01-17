@@ -38,27 +38,27 @@ Sub VBAChallenge()
             ws.Range("l1") = "Total Stock Volume"
         
         'For loop for Ticker
-            For i = 2 To LastRow
+            For I = 2 To LastRow
             
-                Ticker = ws.Cells(i, 1).Value
+                Ticker = ws.Cells(I, 1).Value
                 
                 'Debug.Print (Ticker)
                 
                 'Print Ticker Value when it Changes
-                If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+                If ws.Cells(I + 1, 1).Value <> ws.Cells(I, 1).Value Then
                     
                     'Debug.Print (Ticker)
                     ws.Range("I" & TickerRow).Value = Ticker
                     
                     'Add Current Row to Stock Volume
-                    StockVolume = StockVolume + ws.Cells(i, 7).Value
+                    StockVolume = StockVolume + ws.Cells(I, 7).Value
                     
                     'Print StockVolume
                     ws.Range("L" & TickerRow).Value = StockVolume
                     'Debug.Print (StockVolume)
                 
                     'Record Stock Close
-                    StockClose = ws.Cells(i, 6).Value
+                    StockClose = ws.Cells(I, 6).Value
                     'Debug.Print (StockClose)
                     
                     'Calculate Stock Yearly Change
@@ -122,15 +122,15 @@ Sub VBAChallenge()
                 Else
                 
                     'Add to Stock Open
-                    StockVolume = StockVolume + ws.Cells(i, 7).Value
+                    StockVolume = StockVolume + ws.Cells(I, 7).Value
                     
                     'Record Stock Open
                     
-                        If ws.Cells(i, 3).Value > 0 Then
+                        If ws.Cells(I, 3).Value > 0 Then
                 
-                            If ws.Cells(i, 1).Value <> ws.Cells(i - 1, 1).Value Then
+                            If ws.Cells(I, 1).Value <> ws.Cells(I - 1, 1).Value Then
                 
-                            StockOpen = ws.Cells(i, 3).Value
+                            StockOpen = ws.Cells(I, 3).Value
                             'Debug.Print (StockOpen)
                             
                             End If
@@ -140,8 +140,70 @@ Sub VBAChallenge()
                    
                 End If
                 
-            Next i
-    
+            Next I
+            
+            LastRow = ws.Cells(Rows.Count, 9).End(xlUp).Row
+            
+            'Set Variable Values
+            Dim GreatestPercentIncrease As Double
+            Dim GreatestPercentIncreaseTicker As String
+            Dim GreatestPercentDecrease As Double
+            Dim GreatestPercentDecreaseTicker As String
+            Dim GreatestTotalVolume As Double
+            Dim GreatestTotalVolumeTicker As String
+
+            
+            GreatestPercentIncrease = 0
+            GreatestPercentIncreaseTicker = ""
+            GreatestPercentDecrease = 0
+            GreatestPercentDecreaseTicker = ""
+            GreatestTotalVolume = 0
+            GreatestTotalVolumeTicker = ""
+            
+            For B = 2 To LastRow
+                
+                'Bonus Work Assignment
+                ws.Range("o2") = "Greatest % Increase"
+
+                'If Statement to find greatest increase
+                If ws.Cells(B, 11) > GreatestPercentIncrease Then
+                
+                    GreatestPercentIncreaseTicker = ws.Cells(B, 9)
+                    GreatestPercentIncrease = ws.Cells(B, 11)
+                    
+                End If
+                
+                If ws.Cells(B, 11) < GreatestPercentDecrease Then
+                
+                    GreatestPercentDecreaseTicker = ws.Cells(B, 9)
+                    GreatestPercentDecrease = ws.Cells(B, 11)
+                    
+                End If
+                
+                If ws.Cells(B, 12) > GreatestTotalVolume Then
+                
+                    GreatestTotalVolumeTicker = ws.Cells(B, 9)
+                    GreatestTotalVolume = ws.Cells(B, 12)
+                    
+                End If
+                
+                ws.Range("o3") = "Greatest % Decrease"
+                ws.Range("o4") = "Greatest Total Volume"
+                ws.Range("p1") = "Ticker"
+                ws.Range("q1") = "Value"
+                ws.Range("P2") = GreatestPercentIncreaseTicker
+                ws.Range("Q2") = GreatestPercentIncrease
+                ws.Range("P3") = GreatestPercentDecreaseTicker
+                ws.Range("Q3") = GreatestPercentDecrease
+                ws.Range("P4") = GreatestTotalVolumeTicker
+                ws.Range("Q4") = GreatestTotalVolume
+                ws.Range("Q2").Value = Format(ws.Range("q2").Value, "0.00%")
+                ws.Range("Q3").Value = Format(ws.Range("q3").Value, "0.00%")
+                
+            Next B
+            
+            ws.Columns("A:Q").EntireColumn.AutoFit
+            
     'Close Worksheet For Loop
     Next ws
 
